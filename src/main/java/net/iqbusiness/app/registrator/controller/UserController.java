@@ -11,10 +11,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+
+import javax.websocket.server.PathParam;
 
 @Slf4j
 @RestController
@@ -28,6 +27,18 @@ public class UserController {
         this.service = service;
     }
 
+    @ApiOperation(value = "Retrieve all (top 100) records")
+    @GetMapping("/")
+    public ResponseEntity findAll(){
+        HttpHeaders headers = new HttpHeaders();
+        try {
+            return new ResponseEntity(service.findAll(), HttpStatus.OK);
+        } catch (Exception ex) {
+            log.error("ServerError while retrieving all users", ex);
+            return new ResponseEntity(headers, HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+
     @ApiOperation(value = "Create a new user record")
     @ApiResponses(value = {
             @ApiResponse(code = 201, message = "User created successfully"),
@@ -35,16 +46,27 @@ public class UserController {
             @ApiResponse(code = 500, message = "Technial server error occured")
     })
     @PostMapping("/")
-    public ResponseEntity<UserDTO> create(@RequestBody UserDTO dto) {
+    public ResponseEntity create(@RequestBody UserDTO dto) {
         HttpHeaders headers = new HttpHeaders();
         try {
-            UserDTO newDTO = service.create(dto);
-            return new ResponseEntity(newDTO, HttpStatus.CREATED);
+            return new ResponseEntity(service.create(dto), HttpStatus.CREATED);
         } catch (BusinessException ex) {
             headers.addAll("errors", ex.getErrors());
             return new ResponseEntity(headers, HttpStatus.BAD_REQUEST);
         } catch (Exception ex) {
             log.error("ServerError while creating new user", ex);
+            return new ResponseEntity(headers, HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+
+    @GetMapping("/{uuid}")
+    public ResponseEntity findById(@PathVariable("uuid") String uuid){
+        HttpHeaders headers = new HttpHeaders();
+        try {
+            UserDTO dto = service.findByUuid(uuid);
+            return new ResponseEntity(dto, HttpStatus.OK);
+        } catch (Exception ex) {
+            log.error("ServerError while retrieving all users", ex);
             return new ResponseEntity(headers, HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
