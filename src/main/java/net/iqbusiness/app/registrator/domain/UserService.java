@@ -4,6 +4,7 @@ import net.iqbusiness.app.registrator.domain.converter.UserConverter;
 import net.iqbusiness.app.registrator.domain.validator.UserValidator;
 import net.iqbusiness.app.registrator.model.dao.UserJpaRepo;
 import net.iqbusiness.app.registrator.model.dto.UserDTO;
+import net.iqbusiness.app.registrator.model.dto.UserSearchDTO;
 import net.iqbusiness.app.registrator.model.entity.User;
 import net.iqbusiness.commons.util.BusinessException;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -33,14 +34,19 @@ public class UserService {
         return converter.toDTOList(entities.getContent());
     }
 
+    public UserDTO findByUuid(String uuid) {
+        Optional<User> optionalUser = jpaRepo.findByUuid(uuid);
+        return converter.toDTO(optionalUser.isPresent() ? optionalUser.get() : null);
+    }
+
+    public List<UserDTO> search(UserSearchDTO dto) {
+        List<User> users = jpaRepo.searchUsers(PageRequest.of(0, 100), dto);
+        return converter.toDTOList(users);
+    }
+
     public UserDTO create(UserDTO dto) throws BusinessException {
         validator.validate(dto, false);
         User newUser = jpaRepo.save(converter.toEntity(dto));
         return converter.toDTO(newUser);
-    }
-
-    public UserDTO findByUuid(String uuid) {
-        Optional<User> optionalUser = jpaRepo.findByUuid(uuid);
-        return converter.toDTO(optionalUser.isPresent() ? optionalUser.get() : null);
     }
 }

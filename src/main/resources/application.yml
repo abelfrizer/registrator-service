@@ -19,15 +19,15 @@ spring:
       format_sql: true
       naming:
         physical-strategy: org.hibernate.boot.model.naming.PhysicalNamingStrategyStandardImpl
-      show_sql: false
-    show-sql: false
+      show_sql: true
+    show-sql: true
 
 logging:
   level:
     net.iqbusiness: DEBUG
     org.springframework: INFO
     org.flywaydb: INFO
-    root: WARN
+    root: INFO
   pattern:
     console: "%d{yyyy-MM-dd HH:mm:ss.SSS} [%t] %-5level %logger{36} - %msg%n"
     file: "%d %p %c{1.} [%t] %m%n"

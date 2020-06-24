@@ -1,5 +1,6 @@
 package net.iqbusiness.app.registrator.model.dao;
 
+import net.iqbusiness.app.registrator.model.dto.UserSearchDTO;
 import net.iqbusiness.app.registrator.model.entity.User;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -25,4 +26,11 @@ public interface UserJpaRepo extends JpaRepository<User, Integer> {
 
     //    @Query("SELECT u FROM User u WHERE u.uuid = :uuid")
     Optional<User> findByUuid(@Param("uuid") String uuid);
+
+    @Query("SELECT u FROM User u " +
+            " WHERE UPPER(u.firstName) LIKE :#{#dto.firstName} " +
+            "    AND UPPER(u.surname) LIKE :#{#dto.surname} " +
+            "    AND u.dateCreated BETWEEN :#{#dto.startDate} AND :#{#dto.endDate}" +
+            " ORDER BY u.dateCreated DESC ")
+    List<User> searchUsers(Pageable pageable, @Param("dto") UserSearchDTO dto);
 }
