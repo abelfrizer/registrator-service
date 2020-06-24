@@ -30,9 +30,20 @@ public class UserValidator extends IQValidator<UserDTO> {
         validateFirstName(dto, errors);
         validateSurname(dto, errors);
         validateIdentity(dto, errors, existingRecord);
-        //TODO: validateTelephone(dto, errors);
+        validateTelephone(dto, errors);
 
         return errors;
+    }
+
+    private void validateTelephone(UserDTO dto, List<String> errors) {
+        final String telNo = StringUtils.trimToEmpty(dto.getTelephone());
+        //length
+        if (StringUtils.isBlank(telNo) || StringUtils.trimToEmpty(telNo).length() != 10) {
+            errors.add("'Tel No' is mandatory and should be 10 characters long");
+        } else if(!StringUtils.isNumeric(telNo)){
+            //numeric numbers only
+            errors.add("'Tel No' should be made up of numbers only");
+        }
     }
 
     private void validateIdentity(UserDTO dto, List<String> errors, boolean existingRecord) {
@@ -50,6 +61,7 @@ public class UserValidator extends IQValidator<UserDTO> {
                 User user = optionalUser.get();
                 if(!Objects.equals(user.getUuid(), dto.getUuid())){
                     //diff UUID
+                    errors.add(String.format("User ID [%s] already exists for a different user", identity));
                 }
             }
         }

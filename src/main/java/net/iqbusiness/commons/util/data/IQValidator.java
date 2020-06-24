@@ -1,5 +1,7 @@
 package net.iqbusiness.commons.util.data;
 
+import org.apache.commons.lang3.StringUtils;
+
 import java.util.List;
 
 public abstract class IQValidator<DTO extends IQDTO> {
