@@ -2,19 +2,12 @@ package net.iqbusiness.app.registrator.model.entity;
 
 import lombok.Data;
 import net.iqbusiness.commons.util.data.IQEntity;
+import org.apache.commons.lang3.StringUtils;
 
 import java.io.Serializable;
 import java.util.Date;
-import javax.persistence.Basic;
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.Table;
-import javax.persistence.Temporal;
-import javax.persistence.TemporalType;
-import javax.persistence.UniqueConstraint;
+import java.util.UUID;
+import javax.persistence.*;
 import javax.xml.bind.annotation.XmlRootElement;
 
 @Data
@@ -56,4 +49,11 @@ public class User implements Serializable, IQEntity {
     @Basic(optional = false)
     @Column(name = "uuid", nullable = false, updatable = false, length = 36)
     private String uuid;
+
+    @PrePersist
+    public void prePersist() {
+        if (StringUtils.isBlank(uuid)) {
+            this.uuid = UUID.randomUUID().toString();
+        }
+    }
 }

@@ -4,7 +4,7 @@ import java.util.List;
 
 public abstract class IQValidator<DTO extends IQDTO> {
 
-    protected abstract List<String> doFieldValidation(DTO var1, boolean var2);
+    protected abstract List<String> doFieldValidation(DTO var1, boolean existingRecord);
 
     public final synchronized void validate(DTO dto, boolean existingRecord) throws ValidationFailureException {
         if (dto == null) {
