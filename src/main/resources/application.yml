@@ -24,7 +24,7 @@ spring:
 
 logging:
   level:
-    com.wyzcrew: DEBUG
+    net.iqbusiness: DEBUG
     org.springframework: INFO
     org.flywaydb: INFO
     root: WARN
