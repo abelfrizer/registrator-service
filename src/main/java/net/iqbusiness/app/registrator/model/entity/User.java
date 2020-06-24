@@ -5,6 +5,7 @@ import net.iqbusiness.commons.util.data.IQEntity;
 import org.apache.commons.lang3.StringUtils;
 
 import java.io.Serializable;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.UUID;
 import javax.persistence.*;
@@ -42,7 +43,7 @@ public class User implements Serializable, IQEntity {
     private String userIdentity;
 
     @Basic(optional = false)
-    @Column(name = "date_created", nullable = false)
+    @Column(name = "date_created", nullable = false, updatable = false)
     @Temporal(TemporalType.TIMESTAMP)
     private Date dateCreated;
 
@@ -52,6 +53,7 @@ public class User implements Serializable, IQEntity {
 
     @PrePersist
     public void prePersist() {
+        this.dateCreated = Calendar.getInstance().getTime();
         if (StringUtils.isBlank(uuid)) {
             this.uuid = UUID.randomUUID().toString();
         }

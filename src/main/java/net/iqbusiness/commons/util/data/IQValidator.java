@@ -14,7 +14,7 @@ public abstract class IQValidator<DTO extends IQDTO> {
         } else {
             List<String> errors = this.doFieldValidation(dto, existingRecord);
             if (errors != null && !errors.isEmpty()) {
-                throw (new ValidationFailureException("Failed to process your request due to validation errors")).addErrors(errors);
+                throw (new ValidationFailureException("Failed to process your request due to validation errors", errors));
             }
         }
     }
