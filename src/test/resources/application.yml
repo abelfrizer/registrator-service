@@ -1,0 +1,30 @@
+spring:
+  datasource:
+    url: jdbc:h2:file:./target/REGISTRATORDB;MODE=MySQL
+    username: sa
+    password:
+    driver-class-name: org.h2.Driver
+    testWhileIdle: true
+
+  flyway:
+    enabled: false
+    table: schema_version
+    baseline-on-migrate: true
+
+  jpa:
+    show-sql: true
+    hibernate:
+      ddl-auto: create-drop
+      dialect: org.hibernate.dialect.MySQLDialect
+      format_sql: true
+      naming:
+        physical-strategy: org.hibernate.boot.model.naming.PhysicalNamingStrategyStandardImpl
+      naming_strategy: org.hibernate.cfg.EJB3NamingStrategy
+      properties:
+        hibernate:
+          jdbc:
+            lob:
+              non_contextual_creation: true
+
+logging.level:
+  com.wyzcrew.apps: DEBUG

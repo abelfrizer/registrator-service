@@ -1,0 +1,34 @@
+spring:
+  flyway:
+    enabled: true
+    table: SCHEMA_VERSION
+    baseline-on-migrate: true
+
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    initialize: true
+    testWhileIdle: true
+    url: jdbc:mysql://localhost:3306/REGISTRATORDB?zeroDateTimeBehavior=convertToNull
+    username: reg_usr
+    password: '}8{G%hfGg,Dtqk:&'
+    validationQuery: SELECT 1
+  jpa:
+    hibernate:
+      ddl-auto: validate
+      dialect: org.hibernate.dialect.MySQL5Dialect
+      format_sql: true
+      naming:
+        physical-strategy: org.hibernate.boot.model.naming.PhysicalNamingStrategyStandardImpl
+      show_sql: false
+    show-sql: false
+
+logging:
+  level:
+    com.wyzcrew: DEBUG
+    org.springframework: INFO
+    org.flywaydb: INFO
+    root: WARN
+  pattern:
+    console: "%d{yyyy-MM-dd HH:mm:ss.SSS} [%t] %-5level %logger{36} - %msg%n"
+    file: "%d %p %c{1.} [%t] %m%n"
+#  file: /app-data/logs/orgman-service.log
